@@ -1,0 +1,4 @@
+# This project currently uses only the Python standard library.
+# Recommended Python version: 3.10+
+#
+# No third-party packages are required.

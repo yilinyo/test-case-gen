@@ -1,0 +1,63 @@
+{
+  "function": "shipping_fee",
+  "target": "examples.shipping_impl:shipping_fee",
+  "max_cases_per_rule": 3,
+  "params": {
+    "weight": {
+      "type": "int",
+      "min": -1,
+      "max": 25,
+      "values": [
+        -1,
+        0,
+        1,
+        2,
+        5,
+        6,
+        20,
+        21
+      ]
+    },
+    "is_member": {
+      "type": "bool"
+    }
+  },
+  "rules": [
+    {
+      "id": "branch_01",
+      "name": "分支 1: weight <= 0",
+      "when": "(weight <= 0)",
+      "expect": "-1"
+    },
+    {
+      "id": "branch_02",
+      "name": "分支 2: is_member and weight <= 5",
+      "when": "(not (weight <= 0)) and (is_member and weight <= 5)",
+      "expect": 0
+    },
+    {
+      "id": "branch_03",
+      "name": "分支 3: weight <= 1",
+      "when": "(not (weight <= 0)) and (not (is_member and weight <= 5)) and (weight <= 1)",
+      "expect": 5
+    },
+    {
+      "id": "branch_04",
+      "name": "分支 4: weight <= 5",
+      "when": "(not (weight <= 0)) and (not (is_member and weight <= 5)) and (not (weight <= 1)) and (weight <= 5)",
+      "expect": 10
+    },
+    {
+      "id": "branch_05",
+      "name": "分支 5: weight <= 20",
+      "when": "(not (weight <= 0)) and (not (is_member and weight <= 5)) and (not (weight <= 1)) and (not (weight <= 5)) and (weight <= 20)",
+      "expect": 20
+    },
+    {
+      "id": "branch_06",
+      "name": "默认返回分支",
+      "when": "(not (weight <= 0)) and (not (is_member and weight <= 5)) and (not (weight <= 1)) and (not (weight <= 5)) and (not (weight <= 20))",
+      "expect": 50
+    }
+  ]
+}

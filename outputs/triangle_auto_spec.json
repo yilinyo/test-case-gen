@@ -1,0 +1,54 @@
+{
+  "function": "check_triangle",
+  "target": "examples.triangle_impl:check_triangle",
+  "max_cases_per_rule": 3,
+  "params": {
+    "d1": {
+      "type": "int",
+      "min": -1,
+      "max": 10
+    },
+    "d2": {
+      "type": "int",
+      "min": -1,
+      "max": 10
+    },
+    "d3": {
+      "type": "int",
+      "min": -1,
+      "max": 10
+    }
+  },
+  "rules": [
+    {
+      "id": "branch_01",
+      "name": "分支 1: d1 <= 0 or d2 <= 0 or d3 <= 0",
+      "when": "(d1 <= 0 or d2 <= 0 or d3 <= 0)",
+      "expect": "non-triangle"
+    },
+    {
+      "id": "branch_02",
+      "name": "分支 2: d1 + d2 <= d3 or d1 + d3 <= d2 or d2 + d3 <= d1",
+      "when": "(not (d1 <= 0 or d2 <= 0 or d3 <= 0)) and (d1 + d2 <= d3 or d1 + d3 <= d2 or d2 + d3 <= d1)",
+      "expect": "non-triangle"
+    },
+    {
+      "id": "branch_03",
+      "name": "分支 3: d1 == d2 and d2 == d3",
+      "when": "(not (d1 <= 0 or d2 <= 0 or d3 <= 0)) and (not (d1 + d2 <= d3 or d1 + d3 <= d2 or d2 + d3 <= d1)) and (d1 == d2 and d2 == d3)",
+      "expect": "equilateral triangle"
+    },
+    {
+      "id": "branch_04",
+      "name": "分支 4: d1 == d2 or d1 == d3 or d2 == d3",
+      "when": "(not (d1 <= 0 or d2 <= 0 or d3 <= 0)) and (not (d1 + d2 <= d3 or d1 + d3 <= d2 or d2 + d3 <= d1)) and (not (d1 == d2 and d2 == d3)) and (d1 == d2 or d1 == d3 or d2 == d3)",
+      "expect": "isosceles triangle"
+    },
+    {
+      "id": "branch_05",
+      "name": "默认返回分支",
+      "when": "(not (d1 <= 0 or d2 <= 0 or d3 <= 0)) and (not (d1 + d2 <= d3 or d1 + d3 <= d2 or d2 + d3 <= d1)) and (not (d1 == d2 and d2 == d3)) and (not (d1 == d2 or d1 == d3 or d2 == d3))",
+      "expect": "other triangle"
+    }
+  ]
+}

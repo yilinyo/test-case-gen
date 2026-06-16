@@ -1,0 +1,64 @@
+{
+  "function": "grade_level",
+  "target": "examples.grade_impl:grade_level",
+  "max_cases_per_rule": 3,
+  "params": {
+    "score": {
+      "type": "int",
+      "min": -5,
+      "max": 105,
+      "values": [
+        -1,
+        0,
+        59,
+        60,
+        69,
+        70,
+        79,
+        80,
+        89,
+        90,
+        100,
+        101
+      ]
+    }
+  },
+  "rules": [
+    {
+      "id": "branch_01",
+      "name": "分支 1: score < 0 or score > 100",
+      "when": "(score < 0 or score > 100)",
+      "expect": "invalid"
+    },
+    {
+      "id": "branch_02",
+      "name": "分支 2: score >= 90",
+      "when": "(not (score < 0 or score > 100)) and (score >= 90)",
+      "expect": "A"
+    },
+    {
+      "id": "branch_03",
+      "name": "分支 3: score >= 80",
+      "when": "(not (score < 0 or score > 100)) and (not (score >= 90)) and (score >= 80)",
+      "expect": "B"
+    },
+    {
+      "id": "branch_04",
+      "name": "分支 4: score >= 70",
+      "when": "(not (score < 0 or score > 100)) and (not (score >= 90)) and (not (score >= 80)) and (score >= 70)",
+      "expect": "C"
+    },
+    {
+      "id": "branch_05",
+      "name": "分支 5: score >= 60",
+      "when": "(not (score < 0 or score > 100)) and (not (score >= 90)) and (not (score >= 80)) and (not (score >= 70)) and (score >= 60)",
+      "expect": "D"
+    },
+    {
+      "id": "branch_06",
+      "name": "默认返回分支",
+      "when": "(not (score < 0 or score > 100)) and (not (score >= 90)) and (not (score >= 80)) and (not (score >= 70)) and (not (score >= 60))",
+      "expect": "F"
+    }
+  ]
+}

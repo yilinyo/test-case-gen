@@ -1,0 +1,55 @@
+{
+  "function": "is_leap_year",
+  "target": "examples.date_impl:is_leap_year",
+  "max_cases_per_rule": 3,
+  "params": {
+    "year": {
+      "type": "int",
+      "min": 0,
+      "max": 2400,
+      "values": [
+        0,
+        1,
+        4,
+        100,
+        400,
+        1900,
+        2000,
+        2023,
+        2024
+      ]
+    }
+  },
+  "rules": [
+    {
+      "id": "branch_01",
+      "name": "分支 1: year <= 0",
+      "when": "(year <= 0)",
+      "expect": false
+    },
+    {
+      "id": "branch_02",
+      "name": "分支 2: year % 400 == 0",
+      "when": "(not (year <= 0)) and (year % 400 == 0)",
+      "expect": true
+    },
+    {
+      "id": "branch_03",
+      "name": "分支 3: year % 100 == 0",
+      "when": "(not (year <= 0)) and (not (year % 400 == 0)) and (year % 100 == 0)",
+      "expect": false
+    },
+    {
+      "id": "branch_04",
+      "name": "分支 4: year % 4 == 0",
+      "when": "(not (year <= 0)) and (not (year % 400 == 0)) and (not (year % 100 == 0)) and (year % 4 == 0)",
+      "expect": true
+    },
+    {
+      "id": "branch_05",
+      "name": "默认返回分支",
+      "when": "(not (year <= 0)) and (not (year % 400 == 0)) and (not (year % 100 == 0)) and (not (year % 4 == 0))",
+      "expect": false
+    }
+  ]
+}

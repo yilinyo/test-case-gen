@@ -1,0 +1,38 @@
+{
+  "function": "classify_number",
+  "target": "examples.number_impl:classify_number",
+  "max_cases_per_rule": 3,
+  "params": {
+    "n": {
+      "type": "int",
+      "min": -5,
+      "max": 8
+    }
+  },
+  "rules": [
+    {
+      "id": "branch_01",
+      "name": "分支 1: n < 0",
+      "when": "(n < 0)",
+      "expect": "negative"
+    },
+    {
+      "id": "branch_02",
+      "name": "分支 2: n == 0",
+      "when": "(not (n < 0)) and (n == 0)",
+      "expect": "zero"
+    },
+    {
+      "id": "branch_03",
+      "name": "分支 3: n % 2 == 0",
+      "when": "(not (n < 0)) and (not (n == 0)) and (n % 2 == 0)",
+      "expect": "positive even"
+    },
+    {
+      "id": "branch_04",
+      "name": "默认返回分支",
+      "when": "(not (n < 0)) and (not (n == 0)) and (not (n % 2 == 0))",
+      "expect": "positive odd"
+    }
+  ]
+}

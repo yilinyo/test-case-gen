@@ -6,7 +6,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: /opt/case-library-deploy
+    working-directory: /opt/cicd/case-library-deploy
 
 jobs:
   test-runner:

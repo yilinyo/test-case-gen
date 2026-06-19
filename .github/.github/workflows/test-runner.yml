@@ -1,0 +1,124 @@
+name: Test Self-hosted Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-runner:
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+
+    timeout-minutes: 5
+
+    steps:
+      - name: Runner basic information
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== Runner 信息 ====="
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner arch: $RUNNER_ARCH"
+
+          echo
+          echo "===== 宿主机信息 ====="
+          hostname
+          whoami
+          pwd
+          uname -a
+          uname -m
+
+      - name: Test file permissions
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== 工作目录写入测试 ====="
+          echo "runner write test" > runner-test.txt
+          cat runner-test.txt
+          rm runner-test.txt
+
+          echo "目录写入正常"
+
+      - name: Test Git
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== Git 测试 ====="
+          git --version
+          git status
+
+      - name: Test GitHub HTTPS
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== GitHub 网络测试 ====="
+
+          for url in \
+            https://github.com \
+            https://api.github.com \
+            https://codeload.github.com \
+            https://ghcr.io/v2/
+          do
+            printf "%-40s" "$url"
+
+            curl \
+              --silent \
+              --show-error \
+              --output /dev/null \
+              --connect-timeout 5 \
+              --max-time 15 \
+              --write-out "HTTP=%{http_code} IP=%{remote_ip} TLS=%{ssl_verify_result}\n" \
+              "$url"
+          done
+
+      - name: Test Docker permission
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== Docker 版本 ====="
+          docker version
+
+          echo
+          echo "===== 正在运行的容器 ====="
+          docker ps \
+            --format 'table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'
+
+          echo
+          echo "===== Docker 镜像 ====="
+          docker images \
+            --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}'
+
+          echo
+          echo "===== Docker 磁盘使用 ====="
+          docker system df
+
+      - name: Test application directory
+        shell: bash
+        continue-on-error: true
+        run: |
+          APP_DIR="/opt/test-case-gen"
+
+          if [ ! -d "$APP_DIR" ]; then
+            echo "$APP_DIR 不存在，跳过测试"
+            exit 0
+          fi
+
+          echo "===== 应用目录权限 ====="
+          ls -ld "$APP_DIR"
+
+          cd "$APP_DIR"
+
+          echo
+          echo "===== Git 仓库状态 ====="
+          git status
+
+          echo
+          echo "===== Compose 状态 ====="
+          docker compose ps

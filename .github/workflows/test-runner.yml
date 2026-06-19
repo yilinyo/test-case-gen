@@ -2,6 +2,11 @@ name: Test Self-hosted Runner
 
 on:
   workflow_dispatch:
+  
+defaults:
+  run:
+    shell: bash
+    working-directory: /opt/case-library-deploy
 
 jobs:
   test-runner:

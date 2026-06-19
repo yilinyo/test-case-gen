@@ -57,31 +57,6 @@ jobs:
           git --version
           git status
 
-      - name: Test GitHub HTTPS
-        shell: bash
-        run: |
-          set -e
-
-          echo "===== GitHub 网络测试 ====="
-
-          for url in \
-            https://github.com \
-            https://api.github.com \
-            https://codeload.github.com \
-            https://ghcr.io/v2/
-          do
-            printf "%-40s" "$url"
-
-            curl \
-              --silent \
-              --show-error \
-              --output /dev/null \
-              --connect-timeout 5 \
-              --max-time 15 \
-              --write-out "HTTP=%{http_code} IP=%{remote_ip} TLS=%{ssl_verify_result}\n" \
-              "$url"
-          done
-
       - name: Test Docker permission
         shell: bash
         run: |
